@@ -13,8 +13,8 @@ console.log("baseProject= ",baseProject)
 
 // 创建 axios 实例
 const service = axios.create({
-//  baseURL: 'http://72.26.250.24:8080/jeecg-boot',
-  baseURL: 'http://127.0.0.1:8080/jeecg-boot', // api base_url
+  baseURL: 'http://72.26.250.24:8080/jeecg-boot',
+//  baseURL: 'http://127.0.0.1:8080/jeecg-boot', // api base_url
   timeout: 30000 // 请求超时时间
 })
 

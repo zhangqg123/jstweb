@@ -2,7 +2,7 @@
   <div class="page-header-index-wide">
     <a-row :gutter="24">
       <a-col :sm="24" :md="12" :xl="6" :style="{ marginBottom: '24px' }">
-        <chart-card :loading="loading" title="今日报警数" total="0">
+        <chart-card :loading="loading" title="今日报警数" :total="alarm.today">
           <a-tooltip title="指标说明" slot="action">
             <a-icon type="info-circle-o" />
           </a-tooltip>
@@ -16,11 +16,11 @@
               11%
             </trend>
           </div>
-          <template slot="footer">总报警数<span>56</span></template>
+          <template slot="footer">总报警数: <span>{{alarm.total}}</span></template>
         </chart-card>
       </a-col>
       <a-col :sm="24" :md="12" :xl="6" :style="{ marginBottom: '24px' }">
-        <chart-card :loading="loading" title="报警量变化" :total="56 | NumberFormat">
+        <chart-card :loading="loading" title="报警量变化" :total="alarm.total | NumberFormat">
           <a-tooltip title="指标说明" slot="action">
             <a-icon type="info-circle-o" />
           </a-tooltip>
@@ -42,7 +42,7 @@
         </chart-card>
       </a-col>
       <a-col :sm="24" :md="12" :xl="6" :style="{ marginBottom: '24px' }">
-        <chart-card :loading="loading" title="运营活动效果" total="78%">
+        <chart-card :loading="loading" title="扫描设备" :total="readCat">
           <a-tooltip title="指标说明" slot="action">
             <a-icon type="info-circle-o" />
           </a-tooltip>
@@ -51,8 +51,8 @@
           </div>
           <template slot="footer">
             <trend flag="down" style="margin-right: 16px;">
-              <span slot="term">同周比</span>
-              12%
+              <span slot="term">耗时:</span>
+              380秒
             </trend>
             <trend flag="up">
               <span slot="term">日环比</span>
@@ -98,7 +98,7 @@
         </a-tabs>
       </div>
     </a-card>
-
+<!--
     <a-row>
       <a-col :span="24">
         <a-card :loading="loading" :bordered="false" title="最近一周访问量统计" :style="{ marginTop: '24px' }">
@@ -131,7 +131,7 @@
           <line-chart-multid :fields="visitFields" :dataSource="visitInfo"></line-chart-multid>
         </a-card>
       </a-col>
-    </a-row>
+    </a-row>  -->
   </div>
 </template>
 
@@ -146,9 +146,9 @@
   import Bar from '@/components/chart/Bar'
   import LineChartMultid from '@/components/chart/LineChartMultid'
   import HeadInfo from '@/components/tools/HeadInfo.vue'
+  import { getAction } from '@/api/manage'
 
   import Trend from '@/components/Trend'
-  import { getLoginfo,getVisitInfo } from '@/api/api'
 
   const rankList = []
   for (let i = 0; i < 7; i++) {
@@ -185,34 +185,68 @@
         center: null,
         rankList,
         barData,
-        loginfo:{},
-        visitFields:['ip','visit'],
-        visitInfo:[],
-        indicator: <a-icon type="loading" style="font-size: 24px" spin />
+        readCat: null,
+        alarm:{
+          total: 0,
+          today: 0
+        },
+//        visitFields:['ip','visit'],
+//        visitInfo:[],
+//        indicator: <a-icon type="loading" style="font-size: 24px" spin />
+        url: {
+          list: "/jst/jstZcAlarm/countList",
+        }
       }
     },
     created() {
       setTimeout(() => {
         this.loading = !this.loading
       }, 1000)
-      this.initLogInfo();
+//      this.initLogInfo();
+      this.loadData();
+    },
+    mounted(){
+
+      const timer = setInterval(() =>{
+        this.loadData();
+      }, 30000);
+// 通过$once来监听定时器
+// 在beforeDestroy钩子触发时清除定时器
+      this.$once('hook:beforeDestroy', () => {
+        clearInterval(timer);
+      })
     },
     methods: {
-      initLogInfo () {
-        getLoginfo(null).then((res)=>{
-          if(res.success){
-            Object.keys(res.result).forEach(key=>{
-              res.result[key] =res.result[key]+""
-            })
-            this.loginfo = res.result;
+      loadData () {
+        var params={};
+        getAction(this.url.list, params).then((res) => {
+          if (res.success) {
+            this.dataSource = res.result;
+            this.alarm.total=res.result.length;
+            var alarmToday=0;
+            for(var i=0;i<res.result.length;i++){
+              var alarm=res.result[i];
+              var t1=new Date().toDateString();
+              var t2=new Date(alarm.sendTime).toDateString();
+              if(t1 == t2){
+                alarmToday++;
+              }
+            }
+            this.alarm.today=alarmToday;
+            var tmpres=res.extMessage.split(",");
+            if(tmpres[1]=="true"){
+              this.runflag=true;
+              this.readCat=tmpres[0];
+            }else{
+              this.runflag=false;
+              this.readCat="停止";
+            }
           }
+          if(res.code===510){
+            this.$message.warning(res.message)
+          }
+//          this.loading = false;
         })
-        getVisitInfo().then(res=>{
-          if(res.success){
-             console.log("aaaaaa",res.result)
-             this.visitInfo = res.result;
-           }
-         })
       },
     }
   }
