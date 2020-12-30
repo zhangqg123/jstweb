@@ -19,6 +19,27 @@
         <a-form-item label="微环境温度编号" :labelCol="labelCol" :wrapperCol="wrapperCol">
           <a-input v-decorator="[ 'whNo', validatorRules.whNo]" placeholder="请输入微环境温度编号"></a-input>
         </a-form-item>
+        <a-form-item label="列头柜数据点编号" :labelCol="labelCol" :wrapperCol="wrapperCol">
+          <a-input v-decorator="[ 'lietouTarget', validatorRules.lietouTarget]" placeholder="请输入列头柜数据点编号"></a-input>
+        </a-form-item>
+        <a-form-item label="微环境数据点" :labelCol="labelCol" :wrapperCol="wrapperCol">
+          <a-input v-decorator="[ 'whTarget', validatorRules.whTarget]" placeholder="请输入微环境数据点"></a-input>
+        </a-form-item>
+        <a-form-item label="有功电度" :labelCol="labelCol" :wrapperCol="wrapperCol">
+          <a-input v-decorator="[ 'lietouYgdd', validatorRules.lietouYgdd]" placeholder="请输入有功电度"></a-input>
+        </a-form-item>
+        <a-form-item label="无功电度" :labelCol="labelCol" :wrapperCol="wrapperCol">
+          <a-input v-decorator="[ 'lietouWgdd', validatorRules.lietouWgdd]" placeholder="请输入无功电度"></a-input>
+        </a-form-item>
+        <a-form-item label="有功功率" :labelCol="labelCol" :wrapperCol="wrapperCol">
+          <a-input v-decorator="[ 'lietouYggl', validatorRules.lietouYggl]" placeholder="请输入有功功率"></a-input>
+        </a-form-item>
+        <a-form-item label="无功功率" :labelCol="labelCol" :wrapperCol="wrapperCol">
+          <a-input v-decorator="[ 'lietouWggl', validatorRules.lietouWggl]" placeholder="请输入无功功率"></a-input>
+        </a-form-item>
+        <a-form-item label="功率因数" :labelCol="labelCol" :wrapperCol="wrapperCol">
+          <a-input v-decorator="[ 'lietouGlys', validatorRules.lietouGlys]" placeholder="请输入功率因数"></a-input>
+        </a-form-item>
 
       </a-form>
     </a-spin>
@@ -58,6 +79,20 @@
           ]},
           whNo: {rules: [
           ]},
+          lietouTarget: {rules: [
+          ]},
+          whTarget: {rules: [
+          ]},
+          lietouYgdd: {rules: [
+          ]},
+          lietouWgdd: {rules: [
+          ]},
+          lietouYggl: {rules: [
+          ]},
+          lietouWggl: {rules: [
+          ]},
+          lietouGlys: {rules: [
+          ]},
         },
         url: {
           add: "/jst/jstZcJg/add",
@@ -76,7 +111,7 @@
         this.model = Object.assign({}, record);
         this.visible = true;
         this.$nextTick(() => {
-          this.form.setFieldsValue(pick(this.model,'jgNo','lietouNo','whNo'))
+          this.form.setFieldsValue(pick(this.model,'jgNo','lietouNo','whNo','lietouTarget','whTarget','lietouYgdd','lietouWgdd','lietouYggl','lietouWggl','lietouGlys'))
         })
       },
       close () {
@@ -119,7 +154,7 @@
         this.close()
       },
       popupCallback(row){
-        this.form.setFieldsValue(pick(row,'jgNo','lietouNo','whNo'))
+        this.form.setFieldsValue(pick(row,'jgNo','lietouNo','whNo','lietouTarget','whTarget','lietouYgdd','lietouWgdd','lietouYggl','lietouWggl','lietouGlys'))
       },
 
       

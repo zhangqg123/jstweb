@@ -2,7 +2,7 @@
   <div class="page-header-index-wide">
     <a-row :gutter="24">
       <a-col :sm="24" :md="12" :xl="6" :style="{ marginBottom: '24px' }">
-        <chart-card :loading="loading" title="今日报警数" :total="alarm.today">
+        <chart-card :loading="loading" title="今日报警数" :total="alarm.today | NumberFormat">
           <a-tooltip title="指标说明" slot="action">
             <a-icon type="info-circle-o" />
           </a-tooltip>
@@ -75,13 +75,13 @@
             </div>
             <a-range-picker :style="{width: '256px'}" />
           </div>
-          <a-tab-pane loading="true" tab="资产数据" key="1">
+          <a-tab-pane loading="true" tab="空调状态" key="1">
             <a-row>
               <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">
-                <bar title="设备数" :dataSource="barData"/>
+                <bar title="开机空调" :dataSource="barData"/>
               </a-col>
               <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
-                <rank-list title="设备数量" :list="rankList"/>
+                <rank-list title="关机空调" :list="rankList"/>
               </a-col>
             </a-row>
           </a-tab-pane>
@@ -151,19 +151,19 @@
   import Trend from '@/components/Trend'
 
   const rankList = []
-  for (let i = 0; i < 7; i++) {
+/*  for (let i = 0; i < 7; i++) {
     rankList.push({
       name: '设备 ' + (i+1) + ' 数量',
       total: 1234.56 - i * 100
     })
-  }
+  }*/
   const barData = []
-  for (let i = 0; i < 12; i += 1) {
+/*  for (let i = 0; i < 12; i += 1) {
     barData.push({
       x: `${i + 1}设备`,
       y: Math.floor(Math.random() * 1000) + 200
     })
-  }
+  }*/
   export default {
     name: "IndexChart",
     components: {
@@ -195,6 +195,7 @@
 //        indicator: <a-icon type="loading" style="font-size: 24px" spin />
         url: {
           list: "/jst/jstZcAlarm/countList",
+          jmaclist: "/work/jst/jzt/jmacList"
         }
       }
     },
@@ -202,8 +203,8 @@
       setTimeout(() => {
         this.loading = !this.loading
       }, 1000)
-//      this.initLogInfo();
-      this.loadData();
+      this.initLogInfo();
+//      this.loadData();
     },
     mounted(){
 
@@ -217,6 +218,34 @@
       })
     },
     methods: {
+      initLogInfo(){
+        var params={};
+        getAction(this.url.jmaclist, params).then((res) => {
+          if (res.success) {
+            let jmacData = res.result;
+            var j1=0;
+            var j2=0;
+            for (let i = 0; i < jmacData.length; i++) {
+              if(jmacData[i].status==1){
+                barData.push({
+                  x: jmacData[i].devName,
+                  y: jmacData[i].status
+                });
+//                j1++;
+              }
+              if(jmacData[i].status==0){
+                rankList.push({
+                  name: jmacData[i].devName,
+                  total: jmacData[i].status
+                })
+                j2++;
+              }
+            }
+            console.log(jmacData.length+"::"+j1+"::"+j2);
+          }
+        });
+        this.loadData();
+      },
       loadData () {
         var params={};
         getAction(this.url.list, params).then((res) => {

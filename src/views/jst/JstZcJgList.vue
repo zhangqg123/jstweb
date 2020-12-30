@@ -130,6 +130,41 @@
             dataIndex: 'whNo'
           },
           {
+            title:'列头柜数据点编号',
+            align:"center",
+            dataIndex: 'lietouTarget'
+          },
+          {
+            title:'微环境数据点',
+            align:"center",
+            dataIndex: 'whTarget'
+          },
+          {
+            title:'有功电度',
+            align:"center",
+            dataIndex: 'lietouYgdd'
+          },
+          {
+            title:'无功电度',
+            align:"center",
+            dataIndex: 'lietouWgdd'
+          },
+          {
+            title:'有功功率',
+            align:"center",
+            dataIndex: 'lietouYggl'
+          },
+          {
+            title:'无功功率',
+            align:"center",
+            dataIndex: 'lietouWggl'
+          },
+          {
+            title:'功率因数',
+            align:"center",
+            dataIndex: 'lietouGlys'
+          },
+          {
             title: '操作',
             dataIndex: 'action',
             align:"center",
