@@ -17,7 +17,9 @@
           <a-input v-decorator="[ 'configName', validatorRules.configName]" placeholder="请输入配置名称"></a-input>
         </a-form-item>
         <a-form-item label="配置值" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-input v-decorator="[ 'configValue', validatorRules.configValue]" placeholder="请输入配置值"></a-input>
+          <a-input v-decorator="[ 'configValue', validatorRules.configValue]" placeholder="请输入配置值"></a-input> 
+<!--          <j-dict-select-tag  v-decorator="['configValue', {}]" :triggerChange="true" placeholder="请选择是否停电"
+                              dictCode="poweroff"/> -->
         </a-form-item>
 
       </a-form>

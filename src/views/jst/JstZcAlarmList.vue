@@ -158,7 +158,10 @@
           {
             title:'报警时间',
             align:"center",
-            dataIndex: 'sendTime'
+            dataIndex: 'sendTime',
+  //          sorter: (a, b) => {
+  //            return a.sendTime.localeCompare(b.sendTime)
+  //          },
           },
 /*          {
             title:'处理状态',
@@ -178,7 +181,7 @@
           }
         ],
         url: {
-          list: "/jst/jstZcAlarm/list",
+          list: "/jst/jstZcAlarm/list?column=send_time&order=desc",
           delete: "/jst/jstZcAlarm/delete",
           deleteBatch: "/jst/jstZcAlarm/deleteBatch",
           exportXlsUrl: "/jst/jstZcAlarm/exportXls",

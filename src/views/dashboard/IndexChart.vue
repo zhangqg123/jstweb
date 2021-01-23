@@ -81,7 +81,7 @@
                 <bar title="开机空调" :dataSource="barData"/>
               </a-col>
               <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
-                <rank-list title="关机空调" :list="rankList"/>
+                <rank-list title="开机空调" :list="rankList"/>
               </a-col>
             </a-row>
           </a-tab-pane>
@@ -226,17 +226,17 @@
             var j1=0;
             var j2=0;
             for (let i = 0; i < jmacData.length; i++) {
-              if(jmacData[i].status==1){
+              if(jmacData[i].status==0){
                 barData.push({
                   x: jmacData[i].devName,
-                  y: jmacData[i].status
+                  y: jmacData[i].status+1
                 });
 //                j1++;
               }
               if(jmacData[i].status==0){
                 rankList.push({
                   name: jmacData[i].devName,
-                  total: jmacData[i].status
+                  total: "开机"
                 })
                 j2++;
               }
